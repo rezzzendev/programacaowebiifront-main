@@ -2,7 +2,6 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { tap } from 'rxjs';
 import { Router } from '@angular/router';
 
 interface FrequenciaDTO {
@@ -30,36 +29,35 @@ interface AlunoBase {
   styleUrls: ['./professor-frequencia.component.css'],
 })
 export class ProfessorFrequenciaComponent implements OnInit {
+
   frequenciaForm!: FormGroup;
   alunos: AlunoBase[] = [];
   disciplinas: ItemBase[] = [];
-
   frequenciaId: number | null = null;
+
   mensagemSucesso = '';
   mensagemErro = '';
 
   private readonly urlFrequencias = 'http://localhost:8080/api/frequencias';
-  private readonly urlDisciplinas = 'http://localhost:8080/api/disciplinas';
   private readonly urlAlunos = 'http://localhost:8080/api/alunos';
 
   constructor(
     private readonly fb: FormBuilder,
     private readonly http: HttpClient,
     private readonly cdr: ChangeDetectorRef,
-    private readonly router: Router // ✅ Adicionado Router para logout
+    private readonly router: Router
   ) {
     this.criarForm();
   }
 
   ngOnInit(): void {
     this.buscarAlunos();
-    this.buscarDisciplinas();
     this.observarSelecoes();
   }
 
-  private limparMensagens() {
-    this.mensagemSucesso = '';
-    this.mensagemErro = '';
+  logout(): void {
+    localStorage.clear();
+    this.router.navigate(['/login']);
   }
 
   private criarForm(): void {
@@ -72,15 +70,22 @@ export class ProfessorFrequenciaComponent implements OnInit {
   }
 
   private observarSelecoes(): void {
-    this.frequenciaForm
-      .get('matricula')
-      ?.valueChanges.pipe(tap(() => this.limparMensagens()))
-      .subscribe(() => this.verificarECarregarFrequencia());
+    // Quando muda o aluno, carregar apenas as disciplinas vinculadas
+    this.frequenciaForm.get('matricula')?.valueChanges.subscribe((matricula) => {
+      this.limparMensagens();
+      if (matricula) {
+        this.buscarDisciplinasDoAluno(matricula);
+        this.verificarECarregarFrequencia();
+      } else {
+        this.disciplinas = [];
+      }
+    });
 
-    this.frequenciaForm
-      .get('disciplinaId')
-      ?.valueChanges.pipe(tap(() => this.limparMensagens()))
-      .subscribe(() => this.verificarECarregarFrequencia());
+    // Quando muda a disciplina, recarrega frequência
+    this.frequenciaForm.get('disciplinaId')?.valueChanges.subscribe(() => {
+      this.limparMensagens();
+      this.verificarECarregarFrequencia();
+    });
   }
 
   private verificarECarregarFrequencia(): void {
@@ -96,41 +101,6 @@ export class ProfessorFrequenciaComponent implements OnInit {
     }
   }
 
-  // ------------------- LOGOUT -------------------
-  logout(): void {
-    localStorage.clear();
-    this.router.navigate(['/login']);
-  }
-
-  carregarFrequenciaExistente(matricula: string, disciplinaId: number): void {
-    this.limparMensagens();
-
-    this.http
-      .get<any>(`${this.urlFrequencias}/aluno/${matricula}/disciplina/${disciplinaId}`)
-      .subscribe({
-        next: (frequenciaExistente: any) => {
-          this.frequenciaId = frequenciaExistente.id;
-
-          this.frequenciaForm.patchValue(
-            {
-              presencas: frequenciaExistente.presencas || 0,
-              faltas: frequenciaExistente.faltas || 0,
-            },
-            { emitEvent: false }
-          );
-        },
-        error: (err) => {
-          if (err.status === 404) {
-            this.frequenciaForm.patchValue({ presencas: 0, faltas: 0 }, { emitEvent: false });
-            this.frequenciaId = null;
-          } else {
-            this.mensagemErro = 'Erro ao carregar frequência existente. Status: ' + err.status;
-            console.error(err);
-          }
-        },
-      });
-  }
-
   private buscarAlunos(): void {
     this.http.get<AlunoBase[]>(this.urlAlunos).subscribe({
       next: (dados) => (this.alunos = dados),
@@ -138,11 +108,33 @@ export class ProfessorFrequenciaComponent implements OnInit {
     });
   }
 
-  private buscarDisciplinas(): void {
-    this.http.get<ItemBase[]>(this.urlDisciplinas).subscribe({
+  // 🔹 Buscar apenas disciplinas do aluno selecionado
+  private buscarDisciplinasDoAluno(matricula: string): void {
+    this.http.get<ItemBase[]>(`${this.urlAlunos}/${matricula}/disciplinas`).subscribe({
       next: (dados) => (this.disciplinas = dados),
-      error: () => (this.mensagemErro = 'Erro ao carregar disciplinas'),
+      error: () => {
+        this.mensagemErro = 'Erro ao carregar disciplinas do aluno';
+        this.disciplinas = [];
+      },
     });
+  }
+
+  carregarFrequenciaExistente(matricula: string, disciplinaId: number): void {
+    this.http
+      .get<any>(`${this.urlFrequencias}/aluno/${matricula}/disciplina/${disciplinaId}`)
+      .subscribe({
+        next: (freq) => {
+          this.frequenciaId = freq.id;
+          this.frequenciaForm.patchValue({
+            presencas: freq.presencas,
+            faltas: freq.faltas,
+          });
+        },
+        error: () => {
+          this.frequenciaForm.patchValue({ presencas: 0, faltas: 0 }, { emitEvent: false });
+          this.frequenciaId = null;
+        },
+      });
   }
 
   enviarFormulario(): void {
@@ -150,20 +142,28 @@ export class ProfessorFrequenciaComponent implements OnInit {
 
     if (this.frequenciaForm.invalid) {
       this.mensagemErro = 'Preencha todos os campos corretamente.';
-      setTimeout(() => this.limparMensagens(), 5000);
+      return;
+    }
+
+    const matricula = this.frequenciaForm.value.matricula;
+    const disciplinaId = Number(this.frequenciaForm.value.disciplinaId);
+
+    // 🔹 Verifica se disciplina selecionada está vinculada ao aluno
+    if (!this.disciplinas.find(d => d.id === disciplinaId)) {
+      this.mensagemErro = 'Aluno não está matriculado nesta disciplina!';
       return;
     }
 
     const payload: FrequenciaDTO = {
-      matricula: this.frequenciaForm.value.matricula,
-      disciplinaId: Number(this.frequenciaForm.value.disciplinaId),
+      matricula,
+      disciplinaId,
       presencas: Number(this.frequenciaForm.value.presencas) || 0,
       faltas: Number(this.frequenciaForm.value.faltas) || 0,
     };
 
     this.http.post(this.urlFrequencias, payload).subscribe({
       next: (res: any) => {
-        this.mensagemSucesso = 'Frequência salva/atualizada com sucesso!';
+        this.mensagemSucesso = 'Frequência salva com sucesso!';
         this.frequenciaId = res.id;
 
         this.frequenciaForm.patchValue(
@@ -214,5 +214,10 @@ export class ProfessorFrequenciaComponent implements OnInit {
         setTimeout(() => this.limparMensagens(), 5000);
       },
     });
+  }
+
+  private limparMensagens() {
+    this.mensagemSucesso = '';
+    this.mensagemErro = '';
   }
 }
