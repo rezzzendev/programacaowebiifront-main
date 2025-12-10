@@ -1,0 +1,20 @@
+<div class="sidebar">
+  <div class="sidebar-header">
+    <h2>Painel do Administrador</h2>
+  </div>
+
+  <nav class="sidebar-nav">
+    <ul>
+      <li><a routerLink="/admin/alunos/cadastro" routerLinkActive="active">Alunos</a></li>
+      <li><a routerLink="/admin/professores/cadastro" routerLinkActive="active">Professores</a></li>
+      <li><a routerLink="/admin/disciplinas/cadastro" routerLinkActive="active">Disciplinas</a></li>
+      <li><a routerLink="/admin/cursos/cadastro" routerLinkActive="active">Cursos</a></li>
+    </ul>
+  </nav>
+
+  <button class="btn-logout" (click)="logout()">Sair</button>
+</div>
+
+<div class="main-content">
+  <h1>Bem-vindo ao painel administrativo!</h1>
+</div>

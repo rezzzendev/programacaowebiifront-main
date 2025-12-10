@@ -1,0 +1,311 @@
+/* === RESET E ESTILOS GERAIS === */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+  color: #1a1a1a;
+  background: #f2f2f7;
+  margin: 0;
+  padding: 0;
+  line-height: 1.6;
+}
+
+/* === SIDEBAR === */
+.sidebar {
+  width: 250px;
+  background: #112d4e;
+  color: #fff;
+  position: fixed;
+  height: 100%;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 18px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+.sidebar-header {
+  padding: 18px 0;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.sidebar-header h2 {
+  font-size: 23px;
+  margin: 0;
+  color: #fff;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.sidebar-nav {
+  flex-grow: 1;
+}
+
+.sidebar-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-nav li {
+  margin: 8px 0;
+}
+
+.sidebar-nav a {
+  color: #ccc;
+  text-decoration: none;
+  font-size: 17px;
+  display: block;
+  padding: 9px 18px;
+  border-radius: 8px;
+  transition: background 0.2s ease-in-out;
+}
+
+.sidebar-nav a:hover,
+.sidebar-nav a.active {
+  background: #002042;
+  color: #fff;
+}
+
+.btn-logout {
+  padding: 11px 18px;
+  background: #d32f2f;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 15.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  margin-top: 20px;
+  width: 100%;
+}
+
+.btn-logout:hover {
+  background: #b71c1c;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+}
+
+/* === CONTEÚDO CENTRALIZADO HORIZONTALMENTE, INICIO NO TOPO === */
+.page-wrapper {
+  flex: 1;
+  margin-left: 250px;
+  width: calc(100% - 250px);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* conteúdo inicia do topo */
+  align-items: center; /* centraliza horizontalmente */
+  padding: 30px;
+  min-height: 100vh;
+  gap: 20px;
+}
+
+/* === FORMULÁRIOS E CONTEÚDO === */
+.form-container {
+  width: 100%;
+  max-width: 800px; /* aumentei para comportar os botões */
+  background: #fff;
+  padding: 30px 35px;
+  border-radius: 16px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e6e6e6;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* centraliza horizontalmente */
+  justify-content: flex-start; /* inicia do topo do container */
+  gap: 18px;
+  overflow-x: auto; /* permite rolagem horizontal se necessário */
+}
+
+.form-container h2,
+.form-container h3 {
+  text-align: center;
+  color: #112d4e;
+  margin-bottom: 12px;
+  font-weight: 700;
+}
+
+/* === FORM GROUP === */
+.form-group {
+  margin-bottom: 18px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.form-group label {
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #112d4e;
+}
+
+.form-group input,
+.form-group select {
+  padding: 12px;
+  font-size: 1rem;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  background: #fafafa;
+  transition: all 0.2s ease-in-out;
+  width: 100%;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #112d4e;
+  background: #fff;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(17, 45, 78, 0.15);
+}
+
+/* === TABELAS DE NOTAS/PROVAS === */
+.tabela-provas,
+.tabela-notas {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.tabela-provas th,
+.tabela-notas th {
+  background: #112d4e;
+  color: #fff;
+  font-weight: 600;
+  padding: 12px;
+}
+
+.tabela-provas td,
+.tabela-notas td {
+  padding: 12px;
+  text-align: center;
+  border-bottom: 1px solid #eee;
+}
+
+.tabela-provas tr:nth-child(even) td,
+.tabela-notas tr:nth-child(even) td {
+  background: #f9f9f9;
+}
+
+.tabela-provas input,
+.tabela-notas input {
+  padding: 8px 10px; /* maior que antes */
+  border-radius: 6px;
+  text-align: center;
+  font-size: 1rem;
+}
+
+/* === BOTÕES === */
+.botoes-acao button,
+button,
+.acoes button {
+  padding: 12px;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  margin-top: 8px;
+  transition: all 0.2s ease;
+}
+
+.botoes-acao button[type='submit'] {
+  background-color: #112d4e;
+  color: #fff;
+}
+
+.botoes-acao button[type='submit']:hover {
+  background-color: #001a36;
+}
+
+.botoes-acao .btn-excluir {
+  background-color: #d32f2f;
+  color: #fff;
+}
+
+.botoes-acao .btn-excluir:hover {
+  background-color: #b71c1c;
+}
+
+/* === MENSAGENS === */
+.sucesso,
+.erro {
+  text-align: center;
+  font-weight: 600;
+  margin-top: 12px;
+}
+
+.sucesso {
+  color: #2e7d32;
+}
+
+.erro {
+  color: #c62828;
+}
+
+/* === RESPONSIVIDADE === */
+@media (max-width: 1024px) {
+  .page-wrapper {
+    margin-left: 80px;
+    width: calc(100% - 80px);
+    padding: 20px;
+  }
+
+  .form-container {
+    max-width: 100%;
+    padding: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 80px;
+    padding: 15px 10px;
+  }
+  .page-wrapper {
+    margin-left: 80px;
+  }
+
+  .form-container {
+    padding: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sidebar {
+    width: 60px;
+    padding: 10px 5px;
+  }
+  .page-wrapper {
+    margin-left: 60px;
+  }
+
+  .form-container {
+    padding: 10px;
+  }
+}
+
+/* === CORREÇÃO COLUNA DE AÇÕES === */
+.tabela-notas td.acoes,
+.tabela-provas td.acoes {
+  min-width: 200px; /* garante espaço */
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+}
+
+.tabela-notas td.acoes button,
+.tabela-provas td.acoes button {
+  white-space: nowrap;
+}

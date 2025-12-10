@@ -1,0 +1,44 @@
+<div class="container-professor">
+  <div class="page-wrapper">
+    <h2>Gerenciar Provas</h2>
+
+    <form [formGroup]="selecaoForm" class="form-container">
+      <label>Disciplina:</label>
+      <select formControlName="disciplinaId">
+        <option [ngValue]="null">Selecione</option>
+        <option *ngFor="let d of disciplinas" [value]="d.id">{{ d.nome }}</option>
+      </select>
+    </form>
+
+    <div *ngIf="selecaoForm.valid" class="form-container">
+      <h3>Cadastrar Nova Prova</h3>
+      <form [formGroup]="cadastroForm">
+        <input type="datetime-local" formControlName="dataHora" />
+        <button type="button" (click)="cadastrarProva()">Cadastrar</button>
+      </form>
+    </div>
+
+    <form [formGroup]="provasForm" *ngIf="provasArray.length > 0" class="form-container">
+      <table class="tabela-provas">
+        <thead>
+          <tr>
+            <th>Data da Prova</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody formArrayName="provas">
+          <tr *ngFor="let prova of provasArray.controls; let i = index" [formGroupName]="i">
+            <td><input type="datetime-local" formControlName="dataHora" /></td>
+            <td class="acoes">
+              <button type="button" (click)="salvarEdicao(i)" class="btn-salvar">Salvar</button>
+              <button type="button" (click)="excluirProva(i)" class="btn-excluir">Excluir</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </form>
+
+    <p class="sucesso" *ngIf="mensagemSucesso">{{ mensagemSucesso }}</p>
+    <p class="erro" *ngIf="mensagemErro">{{ mensagemErro }}</p>
+  </div>
+</div>

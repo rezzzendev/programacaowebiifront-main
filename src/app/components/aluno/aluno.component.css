@@ -1,0 +1,199 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+  color: #1a1a1a;
+  background: #f2f2f7;
+  margin: 0;
+  padding: 0;
+  line-height: 1.6;
+}
+
+/* Container centralizado vertical e horizontal */
+.container-aluno {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 20px;
+  position: relative;
+}
+
+/* Botão de Sair fixo no topo direito */
+.btn-logout {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: #d32f2f;
+  color: #fff;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-logout:hover {
+  background: #b71c1c;
+  transform: translateY(-2px);
+}
+
+/* Header centralizado */
+.header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.header h1 {
+  font-size: 2rem;
+  color: #112d4e;
+  font-weight: 700;
+}
+
+.nome-aluno {
+  font-size: 1.5rem;
+  color: #112d4e;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.header p {
+  font-size: 1.1rem;
+  color: #555;
+}
+
+/* Disciplinas */
+.disciplinas-botoes {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.disciplinas-botoes h3 {
+  margin-bottom: 15px;
+  color: #112d4e;
+}
+
+.disciplinas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+}
+
+.btn-disciplina {
+  padding: 12px 16px;
+  border-radius: 11px;
+  cursor: pointer;
+  font-size: 16.5px;
+  font-weight: 600;
+  border: none;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.09);
+  transition: all 0.3s ease-in-out;
+  background: #112d4e;
+  color: #fff;
+}
+
+.btn-disciplina:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 7px 16px rgba(0, 0, 0, 0.14);
+  opacity: 0.94;
+}
+
+/* Card de detalhes */
+.card-dados {
+  border-radius: 18px;
+  padding: 48px 44px;
+  background: #ffffff;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.14);
+  width: 100%;
+  max-width: 1100px;
+  font-size: 17.5px;
+  line-height: 1.68;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  margin-bottom: 30px;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.card-dados h2 {
+  text-align: center;
+  font-size: 31px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 20px;
+}
+
+.dados-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: 30px;
+}
+
+.info-bloco {
+  background: #fafbff;
+  border-radius: 12px;
+  padding: 20px 22px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+  border-left: 6px solid transparent;
+  transition: all 0.3s ease-in-out;
+  position: relative;
+}
+
+.info-bloco:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.14);
+}
+
+.info-bloco h3 {
+  font-size: 21.5px;
+  font-weight: 600;
+  color: #143c69;
+  border-bottom: 2px solid #dbe3ee;
+  padding-bottom: 9px;
+  margin-bottom: 12px;
+}
+
+.info-bloco.notas {
+  border-left-color: #143c69;
+}
+.info-bloco.faltas {
+  border-left-color: #b71c1c;
+}
+.info-bloco.provas {
+  border-left-color: #08632e;
+}
+
+.info-bloco ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.info-bloco ul li {
+  background: #fff;
+  padding: 8px 12px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  font-size: 18.5px;
+  font-weight: 500;
+}
+
+/* Animação */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

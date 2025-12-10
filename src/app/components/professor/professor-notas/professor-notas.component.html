@@ -1,0 +1,108 @@
+<div class="container-professor">
+  <div class="page-wrapper">
+    <div class="form-container">
+      <h2>Lançamento de Notas</h2>
+
+      <div class="form-group">
+        <label for="disciplina-select">Disciplina:</label>
+        <select
+          id="disciplina-select"
+          (change)="onDisciplinaChange($event)"
+          [value]="disciplinaSelecionada || ''"
+        >
+          <option value="">Selecione a disciplina</option>
+          <option *ngFor="let d of disciplinas" [value]="d.id">{{ d.nome }}</option>
+        </select>
+      </div>
+
+      <div class="mensagens">
+        <p class="sucesso" *ngIf="mensagemSucesso">{{ mensagemSucesso }}</p>
+        <p class="erro" *ngIf="mensagemErro">{{ mensagemErro }}</p>
+      </div>
+
+      <div *ngIf="!disciplinaSelecionada" class="aviso">
+        Selecione uma disciplina para lançar as notas.
+      </div>
+
+      <div *ngIf="disciplinaSelecionada && alunosComNotas.length > 0" class="tabela-notas">
+        <table>
+          <thead>
+            <tr>
+              <th>Aluno</th>
+              <th>1º Bimestre</th>
+              <th>2º Bimestre</th>
+              <th>Média</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let aluno of alunosComNotas">
+              <td>
+                {{ aluno.nome }} <small>({{ aluno.matricula }})</small>
+              </td>
+              <td>
+                <input
+                  type="number"
+                  min="0"
+                  max="10"
+                  step="0.1"
+                  [(ngModel)]="aluno.bimestre1"
+                  (input)="atualizarMedia(aluno)"
+                  [disabled]="!disciplinaSelecionada || !aluno.isEditing"
+                />
+              </td>
+              <td>
+                <input
+                  type="number"
+                  min="0"
+                  max="10"
+                  step="0.1"
+                  [(ngModel)]="aluno.bimestre2"
+                  (input)="atualizarMedia(aluno)"
+                  [disabled]="!disciplinaSelecionada || !aluno.isEditing"
+                />
+              </td>
+              <td>
+                <strong [style.color]="aluno.media >= 7 ? 'var(--success)' : 'var(--danger)'">
+                  {{ aluno.media | number : '1.1-1' }}
+                </strong>
+              </td>
+              <td class="acoes">
+                <button
+                  class="btn-editar"
+                  *ngIf="!aluno.isEditing"
+                  (click)="habilitarEdicao(aluno)"
+                  [disabled]="!disciplinaSelecionada"
+                >
+                  Editar
+                </button>
+                <button
+                  class="btn-salvar"
+                  *ngIf="aluno.isEditing"
+                  (click)="salvarNota(aluno)"
+                  [disabled]="!disciplinaSelecionada"
+                >
+                  Salvar
+                </button>
+                <button
+                  class="btn-excluir"
+                  *ngIf="aluno.id && !aluno.isEditing"
+                  (click)="excluirNota(aluno)"
+                >
+                  Excluir
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div
+        *ngIf="disciplinaSelecionada && alunosComNotas.length === 0 && !mensagemErro"
+        class="aviso"
+      >
+        Carregando alunos ou não há alunos para esta disciplina...
+      </div>
+    </div>
+  </div>
+</div>

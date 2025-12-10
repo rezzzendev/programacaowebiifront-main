@@ -1,0 +1,129 @@
+<div class="container">
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <div class="logo-icon"></div>
+      <h2>Painel do Administrador</h2>
+    </div>
+
+    <nav class="sidebar-nav">
+      <ul>
+        <li>
+          <a [routerLink]="['/admin/alunos/cadastro']" routerLinkActive="active">Alunos</a>
+        </li>
+        <li>
+          <a [routerLink]="['/admin/professores/cadastro']" routerLinkActive="active"
+            >Professores</a
+          >
+        </li>
+        <li>
+          <a [routerLink]="['/admin/disciplinas/cadastro']" routerLinkActive="active"
+            >Disciplinas</a
+          >
+        </li>
+        <li>
+          <a [routerLink]="['/admin/cursos/cadastro']" routerLinkActive="active">Cursos</a>
+        </li>
+      </ul>
+    </nav>
+
+    <button class="btn-logout" (click)="logout()">Sair</button>
+  </div>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <div class="page-wrapper">
+    <!-- FORMULÁRIO DE CADASTRO -->
+    <div class="form-container">
+      <h2>Cadastro de Alunos</h2>
+
+      <form #alunoForm="ngForm">
+        <label for="matricula">Matrícula:</label>
+        <input
+          id="matricula"
+          name="matricula"
+          type="text"
+          [(ngModel)]="alunoDTO.matricula"
+          (blur)="buscarPorMatricula()"
+          [disabled]="!editando"
+        />
+
+        <label for="nome">Nome:</label>
+        <input id="nome" name="nome" type="text" [(ngModel)]="alunoDTO.nome" />
+
+        <label for="email">Email:</label>
+        <input id="email" name="email" type="email" [(ngModel)]="alunoDTO.email" />
+
+        <label for="dataNascimento">Data de Nascimento:</label>
+        <input
+          id="dataNascimento"
+          name="dataNascimento"
+          type="date"
+          [(ngModel)]="alunoDTO.dataNascimento"
+        />
+
+        <label for="curso">Curso:</label>
+        <select id="curso" name="curso" [(ngModel)]="alunoDTO.cursoId" required>
+          <option *ngFor="let c of cursos" [value]="c.id">{{ c.nome }}</option>
+        </select>
+
+        <label for="disciplinas">Disciplinas:</label>
+        <select
+          id="disciplinas"
+          name="disciplinas"
+          [(ngModel)]="alunoDTO.disciplinasIds"
+          [ngModelOptions]="{ standalone: true }"
+          multiple
+          size="6"
+        >
+          <option *ngFor="let d of disciplinas" [value]="d.id">{{ d.nome }}</option>
+        </select>
+
+        <div class="button-group">
+          <button type="button" (click)="cadastrar()" [disabled]="editando">Cadastrar</button>
+          <button type="button" (click)="atualizar()" [disabled]="!editando">Atualizar</button>
+        </div>
+      </form>
+
+      <div class="mensagens">
+        <p class="sucesso" *ngIf="mensagemSucesso">{{ mensagemSucesso }}</p>
+        <p class="erro" *ngIf="mensagemErro">{{ mensagemErro }}</p>
+      </div>
+    </div>
+
+    <!-- TABELA DE CONSULTA -->
+    <div class="form-container" style="max-width: 800px; margin-top: 40px">
+      <h2>Consultar Alunos</h2>
+
+      <button (click)="buscarAlunos()">Recarregar</button>
+
+      <table *ngIf="listaAlunos.length > 0">
+        <thead>
+          <tr>
+            <th>Matrícula</th>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Curso</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let a of listaAlunos">
+            <td>{{ a.matricula }}</td>
+            <td>{{ a.nome }}</td>
+            <td>{{ a.email }}</td>
+            <td>{{ a.curso?.nome }}</td>
+            <td class="acoes">
+              <button (click)="carregarParaEdicao(a)">Editar</button>
+              <button
+                (click)="excluirAluno(a.matricula)"
+                [disabled]="deletando[a.matricula] === true"
+              >
+                {{ deletando[a.matricula] ? 'Excluindo...' : 'Excluir' }}
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

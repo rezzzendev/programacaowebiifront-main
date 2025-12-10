@@ -1,0 +1,61 @@
+<div class="container-professor">
+  <div class="page-wrapper">
+    <div class="form-container">
+      <h2>Atualizar Frequência</h2>
+
+      <form [formGroup]="frequenciaForm" (ngSubmit)="enviarFormulario()">
+        <div class="form-group">
+          <label>Aluno:</label>
+          <select formControlName="matricula">
+            <option [ngValue]="null" disabled>Selecione o aluno</option>
+            <option *ngFor="let a of alunos" [value]="a.matricula">
+              {{ a.nome }} - {{ a.matricula }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Disciplina:</label>
+          <select formControlName="disciplinaId">
+            <option [ngValue]="null" disabled>Selecione</option>
+            <option *ngFor="let d of disciplinas" [value]="d.id">{{ d.nome }}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Total de Presenças:</label>
+          <input type="number" formControlName="presencas" min="0" />
+        </div>
+
+        <div class="form-group">
+          <label>Total de Faltas:</label>
+          <input type="number" formControlName="faltas" min="0" />
+        </div>
+
+        <div class="botoes-acao">
+          <button
+            type="submit"
+            [disabled]="
+              frequenciaForm.invalid ||
+              !frequenciaForm.get('matricula')?.value ||
+              !frequenciaForm.get('disciplinaId')?.value
+            "
+          >
+            Salvar/Atualizar Frequência
+          </button>
+          <button
+            type="button"
+            class="btn-excluir"
+            (click)="excluirFrequencia()"
+            [disabled]="!frequenciaId"
+          >
+            Excluir Registro
+          </button>
+        </div>
+      </form>
+
+      <p class="sucesso" *ngIf="mensagemSucesso">{{ mensagemSucesso }}</p>
+      <p class="erro" *ngIf="mensagemErro">{{ mensagemErro }}</p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,60 @@
+<div class="container-aluno">
+  <button class="btn-logout">Sair</button>
+
+  <header class="header">
+    <h1>Painel do Aluno</h1>
+    <p class="nome-aluno">
+      <strong>{{ nome }}</strong>
+    </p>
+    <p>
+      Matrícula: <strong>{{ matricula }}</strong>
+    </p>
+  </header>
+
+  <div class="disciplinas-botoes">
+    <h3>Disciplinas Matriculadas</h3>
+    <div class="disciplinas" *ngIf="disciplinas.length > 0; else semDisciplinas">
+      <button
+        *ngFor="let disc of disciplinas"
+        class="btn-disciplina"
+        (click)="mostrarCard(disc.id)"
+      >
+        {{ disc.nome }}
+      </button>
+    </div>
+    <ng-template #semDisciplinas>
+      <p>Nenhuma disciplina encontrada.</p>
+    </ng-template>
+  </div>
+
+  <div class="card-dados" *ngIf="dados">
+    <h2>{{ dados.nome }}</h2>
+    <hr />
+
+    <div class="dados-grid">
+      <div class="info-bloco notas">
+        <h3>Notas e Média</h3>
+        <p><strong>Nota 1:</strong> {{ dados.nota1 | number : '1.2-2' }}</p>
+        <p><strong>Nota 2:</strong> {{ dados.nota2 | number : '1.2-2' }}</p>
+        <p class="media"><strong>MÉDIA:</strong> {{ dados.media | number : '1.2-2' }}</p>
+        <p><strong>Nota Necessária:</strong> {{ dados.notaNecessaria | number : '1.2-2' }}</p>
+      </div>
+
+      <div class="info-bloco faltas">
+        <h3>Frequência</h3>
+        <p><strong>Presenças:</strong> {{ dados.presencas }}</p>
+        <p><strong>Faltas:</strong> {{ dados.faltas }}</p>
+      </div>
+
+      <div class="info-bloco provas">
+        <h3>Datas de Prova</h3>
+        <ul *ngIf="dados.horariosProvas.length > 0; else semProvas">
+          <li *ngFor="let prova of dados.horariosProvas">{{ formatarData(prova) }}</li>
+        </ul>
+        <ng-template #semProvas>
+          <p>Nenhuma prova marcada.</p>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>

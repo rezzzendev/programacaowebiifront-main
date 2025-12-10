@@ -1,0 +1,32 @@
+<div class="container-professor">
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <h2>Painel do Professor</h2>
+    </div>
+
+    <nav class="sidebar-nav">
+      <ul>
+        <li><a routerLink="/professor/provas" routerLinkActive="active">Provas</a></li>
+        <li><a routerLink="/professor/frequencias" routerLinkActive="active">Frequência</a></li>
+        <li><a routerLink="/professor/notas" routerLinkActive="active">Notas</a></li>
+      </ul>
+    </nav>
+
+    <button class="btn-logout" (click)="logout()">Sair</button>
+  </div>
+
+  <!-- CONTEÚDO -->
+  <div class="page-wrapper">
+    <!-- Mensagem de boas-vindas só na rota raiz /professor -->
+    <ng-container *ngIf="router.url === '/professor'">
+      <h1 class="titulo-bemvindo">Bem-vindo ao Painel do Professor!</h1>
+      <p class="mensagem-bemvindo">
+        <b>Selecione a ação desejada no menu à esquerda.</b>
+      </p>
+    </ng-container>
+
+    <!-- Aqui aparecem as páginas filhas (provas, frequência, notas) -->
+    <router-outlet></router-outlet>
+  </div>
+</div>

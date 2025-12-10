@@ -1,0 +1,64 @@
+<div class="container">
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <div class="logo-icon"></div>
+      <h2>Painel do Administrador</h2>
+    </div>
+
+    <nav class="sidebar-nav">
+      <ul>
+        <li><a routerLink="/admin/alunos/cadastro" routerLinkActive="active">Alunos</a></li>
+        <li>
+          <a routerLink="/admin/professores/cadastro" routerLinkActive="active">Professores</a>
+        </li>
+        <li>
+          <a routerLink="/admin/disciplinas/cadastro" routerLinkActive="active">Disciplinas</a>
+        </li>
+        <li><a routerLink="/admin/cursos/cadastro" routerLinkActive="active">Cursos</a></li>
+      </ul>
+    </nav>
+
+    <a class="btn-logout" routerLink="/login">Sair</a>
+  </div>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <div class="page-wrapper">
+    <div class="form-container">
+      <h2>Cadastro de Professor</h2>
+
+      <form [formGroup]="formularioProfessor" (ngSubmit)="enviarFormulario()">
+        <div class="form-group">
+          <label for="nome">Nome:</label>
+          <input
+            id="nome"
+            type="text"
+            formControlName="nome"
+            placeholder="Digite o nome"
+            required
+          />
+        </div>
+
+        <div class="form-group email-group">
+          <label for="email">E-mail:</label>
+          <input
+            id="email"
+            type="email"
+            formControlName="email"
+            placeholder="Digite o e-mail"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <button type="submit" [disabled]="formularioProfessor.invalid">Cadastrar</button>
+        </div>
+      </form>
+
+      <div class="mensagens">
+        <p class="sucesso" *ngIf="mensagemSucesso">{{ mensagemSucesso }}</p>
+        <p class="erro" *ngIf="mensagemErro">{{ mensagemErro }}</p>
+      </div>
+    </div>
+  </div>
+</div>
